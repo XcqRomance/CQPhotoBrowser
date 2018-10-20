@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'CQPhotoBrowser_Example' do
+  pod 'CQPhotoBrowser', :path => '../'
+
+  target 'CQPhotoBrowser_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
