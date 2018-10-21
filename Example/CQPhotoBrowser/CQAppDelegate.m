@@ -18,8 +18,9 @@
     self.window.backgroundColor = [UIColor whiteColor]; // 0.216007 ms
     [self.window makeKeyAndVisible]; // 6.067991 ms
     
+    CQViewController *cqVc = [[CQViewController alloc] init];
     
-    self.window.rootViewController = [[CQViewController alloc] init]; 
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:cqVc]; 
     
     return YES;
 }

@@ -1,22 +1,29 @@
 //
-//  CQPhotoViewController.m
+//  CQPhotoBrowser.m
 //  CQPhotoBrowser
 //
-//  Created by xcqromance on 2018/10/20.
+//  Created by 谢传权 on 2018/10/21.
 //
 
-#import "CQPhotoBrowser.h"
+#import "CQPhotoBrowserVC.h"
 #import "CQPhotoBrowserCell.h"
-//#import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
-@interface CQPhotoBrowser () <UICollectionViewDataSource>
+@interface CQPhotoBrowserVC () <UICollectionViewDataSource,UICollectionViewDelegate>
 
 @property (nonatomic, nonatomic) UICollectionView *photoCollectionView;
 
 
 @end
 
-@implementation CQPhotoBrowser
+@implementation CQPhotoBrowserVC
+
+- (instancetype)init {
+    if (self = [super init]) {
+        
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -43,6 +50,8 @@
         layout.itemSize = CGSizeMake(CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds));
         layout.minimumInteritemSpacing = 0;
         _photoCollectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:layout];
+        _photoCollectionView.delegate = self;
+        _photoCollectionView.dataSource = self;
         [_photoCollectionView registerClass:[CQPhotoBrowserCell class] forCellWithReuseIdentifier:NSStringFromClass([CQPhotoBrowserCell class])];
     }
     return _photoCollectionView;
@@ -59,8 +68,9 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     CQPhotoBrowserCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([CQPhotoBrowserCell class]) forIndexPath:indexPath];
-//    [cell.imageView ]
+    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:self.dataSourceArray[indexPath.item]] placeholderImage:[UIImage imageNamed:@"bookDefault"]];
     return cell;
 }
+
 
 @end

@@ -9,7 +9,6 @@
 #import "CQViewController.h"
 #import "CQPhotoCell.h"
 #import <SDWebImage/UIImageView+WebCache.h>
-//#import <CQPhotoBrowser/CQPhotoBrowser-umbrella.h>
 #import "CQPhotoBrowserUtil.h"
 
 @interface CQViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
@@ -54,8 +53,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-//    cqph
-    [CQPhotoBrowserUtil showPhotoWithPhotos:self.photos index:0 thumbImages:nil thumbImagesFrame:nil];
+    [CQPhotoBrowserUtil showPhotoWithPhotos:self.photos index:0 thumbImages:@[] thumbImagesFrame:@[]];
 }
 
 @end

@@ -6,20 +6,21 @@
 //
 
 #import "CQPhotoBrowserUtil.h"
-#import "CQPhotoBrowser.h"
+#import "CQPhotoBrowserVC.h"
 
 @implementation CQPhotoBrowserUtil
 
 
 + (void)showPhotoWithPhotos:(NSArray *)photos index:(NSUInteger)index thumbImages:(NSArray <UIImage *> *)thumbImages thumbImagesFrame:(NSArray <NSValue *>*)thumbImagesFrame {
     UIViewController *topVC = [UIApplication sharedApplication].keyWindow.rootViewController;
-    CQPhotoBrowser *photoBrowser = [[CQPhotoBrowser alloc] init];
+    CQPhotoBrowserVC *photoBrowser = [[CQPhotoBrowserVC alloc] init];
     photoBrowser.dataSourceArray = [photos mutableCopy];
     photoBrowser.currentIndex = index;
-    photoBrowser.backgroundImage = [self captureWithView:topVC.navigationController.view];
+//    photoBrowser.backgroundImage = [self captureWithView:topVC.navigationController.view];
     photoBrowser.thumbImages = thumbImages;
     photoBrowser.thumbImagesFrame = thumbImagesFrame;
-    [topVC presentViewController:photoBrowser animated:YES completion:nil];
+    [topVC.navigationController pushViewController:photoBrowser animated:YES];
+//    [topVC presentViewController:photoBrowser animated:YES completion:nil];
 }
 
 + (UIImage *)captureWithView:(UIView *)view {

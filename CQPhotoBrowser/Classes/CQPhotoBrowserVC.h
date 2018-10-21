@@ -2,20 +2,21 @@
 //  CQPhotoBrowser.h
 //  CQPhotoBrowser
 //
-//  Created by xcqromance on 2018/10/20.
+//  Created by 谢传权 on 2018/10/21.
 //
 
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CQPhotoBrowser : UIViewController
+@interface CQPhotoBrowserVC : UIViewController
 
 @property (nonatomic, strong) UIImage *backgroundImage;
 @property (nonatomic, strong) NSArray *thumbImages;
 @property (nonatomic, strong) NSArray *thumbImagesFrame;
 @property (nonatomic, strong) NSMutableArray *dataSourceArray;
 @property (nonatomic, assign) NSUInteger currentIndex;
+
 
 @end
 
