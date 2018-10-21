@@ -2,6 +2,7 @@ use_frameworks!
 
 target 'CQPhotoBrowser_Example' do
   pod 'CQPhotoBrowser', :path => '../'
+  pod 'SDWebImage'
 
   target 'CQPhotoBrowser_Tests' do
     inherit! :search_paths

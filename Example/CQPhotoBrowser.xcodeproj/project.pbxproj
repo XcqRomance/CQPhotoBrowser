@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		101CFC4DF6EE4E1A75D37AF5 /* Pods_CQPhotoBrowser_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12FE5EA4B01AFF22D81B8F8E /* Pods_CQPhotoBrowser_Example.framework */; };
+		234EDB8D217B46840014BD6F /* CQPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 234EDB8C217B46840014BD6F /* CQPhotoCell.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -39,7 +40,9 @@
 /* Begin PBXFileReference section */
 		0475D006755B0F53262EC619 /* Pods-CQPhotoBrowser_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CQPhotoBrowser_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-CQPhotoBrowser_Example/Pods-CQPhotoBrowser_Example.release.xcconfig"; sourceTree = "<group>"; };
 		12FE5EA4B01AFF22D81B8F8E /* Pods_CQPhotoBrowser_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CQPhotoBrowser_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		19F826066806B7B0F2A751C8 /* CQPhotoBrowser.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = CQPhotoBrowser.podspec; path = ../CQPhotoBrowser.podspec; sourceTree = "<group>"; };
+		19F826066806B7B0F2A751C8 /* CQPhotoBrowser.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = CQPhotoBrowser.podspec; path = ../CQPhotoBrowser.podspec; sourceTree = "<group>"; };
+		234EDB8B217B46840014BD6F /* CQPhotoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CQPhotoCell.h; sourceTree = "<group>"; };
+		234EDB8C217B46840014BD6F /* CQPhotoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CQPhotoCell.m; sourceTree = "<group>"; };
 		46D4B81571DC1612E9F390CB /* Pods-CQPhotoBrowser_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CQPhotoBrowser_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CQPhotoBrowser_Tests/Pods-CQPhotoBrowser_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* CQPhotoBrowser_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CQPhotoBrowser_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -62,8 +65,8 @@
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		87FE3F804285336024B2916B /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		90358A00A545A80505DDF4F2 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		87FE3F804285336024B2916B /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		90358A00A545A80505DDF4F2 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		968CADA5EE9860EA6BFA9DA1 /* Pods-CQPhotoBrowser_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CQPhotoBrowser_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CQPhotoBrowser_Example/Pods-CQPhotoBrowser_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		B1722659E668D605A0EF36CB /* Pods_CQPhotoBrowser_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CQPhotoBrowser_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0BCC3D75250A16DE1021D31 /* Pods-CQPhotoBrowser_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CQPhotoBrowser_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CQPhotoBrowser_Tests/Pods-CQPhotoBrowser_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -137,6 +140,8 @@
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				6003F5A5195388D20070C39A /* CQViewController.h */,
 				6003F5A6195388D20070C39A /* CQViewController.m */,
+				234EDB8B217B46840014BD6F /* CQPhotoCell.h */,
+				234EDB8C217B46840014BD6F /* CQPhotoCell.m */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
@@ -320,10 +325,12 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-CQPhotoBrowser_Example/Pods-CQPhotoBrowser_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CQPhotoBrowser/CQPhotoBrowser.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CQPhotoBrowser.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -357,6 +364,7 @@
 			files = (
 				6003F59E195388D20070C39A /* CQAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* CQViewController.m in Sources */,
+				234EDB8D217B46840014BD6F /* CQPhotoCell.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

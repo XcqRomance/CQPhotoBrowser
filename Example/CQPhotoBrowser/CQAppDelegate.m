@@ -7,12 +7,20 @@
 //
 
 #import "CQAppDelegate.h"
+#import "CQViewController.h"
 
 @implementation CQAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]; // 3.847003 ms
+    self.window.backgroundColor = [UIColor whiteColor]; // 0.216007 ms
+    [self.window makeKeyAndVisible]; // 6.067991 ms
+    
+    
+    self.window.rootViewController = [[CQViewController alloc] init]; 
+    
     return YES;
 }
 
