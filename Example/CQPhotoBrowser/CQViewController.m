@@ -33,7 +33,7 @@
     NSArray *datasource = @[@"https://opas-file-aliyun.firstleap.cn/image/20160823/7899760bff8bc4f5b34c0ae40910da16.png",@"https://opas-file-aliyun.firstleap.cn/image/20160826/d51285bb636281dce6974313eaf6f15d.png",@"https://opas-file-aliyun.firstleap.cn/image/20160906/8d4756e4e1ee555ef2fb5e2abda47afe.png",@"https://ss2.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/super/whfpf%3D425%2C260%2C50/sign=a4b3d7085dee3d6d2293d48b252b5910/0e2442a7d933c89524cd5cd4d51373f0830200ea.jpg"];
     self.photos = [NSMutableArray array];
     
-    for (int i = 0; i < 8; i ++) {
+    for (int i = 0; i < 3; i ++) {
         [self.photos addObjectsFromArray:datasource];
     }
 }
@@ -63,7 +63,21 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [CQPhotoBrowserUtil showPhotoWithPhotos:self.photos index:0 thumbImages:@[] thumbImagesFrame:@[]];
+    NSMutableArray *thumbImages = [NSMutableArray array];
+    NSMutableArray *thumbImagesFrames = [NSMutableArray array];
+    for (NSUInteger i = 0; i < self.photos.count; i ++) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:0];
+        CQPhotoCell *cell = (CQPhotoCell *)[collectionView cellForItemAtIndexPath:indexPath];
+        UIImageView *imageView = cell.imageView;
+        [thumbImages addObject:imageView.image];
+        
+        CGRect imageViewFrame = imageView.frame;
+        CGRect windowFrame = [imageView.superview convertRect:imageViewFrame toView:[UIApplication sharedApplication].keyWindow];
+        NSValue *rectValue = [NSValue valueWithCGRect:windowFrame];
+        [thumbImagesFrames addObject:rectValue];
+    }
+    
+    [CQPhotoBrowserUtil showPhotoWithPhotos:self.photos index:indexPath.item thumbImages:thumbImages thumbImagesFrame:thumbImagesFrames];
     
 }
 

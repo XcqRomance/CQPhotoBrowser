@@ -19,9 +19,9 @@
     photoBrowser.currentIndex = index;
     photoBrowser.backgroundImage = [NSObject captureWithView:topVC.navigationController.view];
     photoBrowser.thumbImages = thumbImages;
-    photoBrowser.thumbImagesFrame = thumbImagesFrame;
+    photoBrowser.thumbImagesFrames = thumbImagesFrame;
 //    [topVC.navigationController pushViewController:photoBrowser animated:YES];
-    [topVC presentViewController:photoBrowser animated:YES completion:nil];
+    [topVC presentViewController:photoBrowser animated:NO completion:nil];
 }
 
 @end

@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UIImage *backgroundImage;
 @property (nonatomic, strong) NSArray *thumbImages;
-@property (nonatomic, strong) NSArray *thumbImagesFrame;
+@property (nonatomic, strong) NSArray *thumbImagesFrames;
 @property (nonatomic, strong) NSMutableArray *dataSourceArray;
 @property (nonatomic, assign) NSUInteger currentIndex;
 
