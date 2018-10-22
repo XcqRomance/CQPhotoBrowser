@@ -5,24 +5,38 @@
 //  Created by 谢传权 on 2018/10/21.
 //
 
-#import "CQPhotoBrowserVC.h"
+#import "CQPhotoBrowser.h"
 #import "CQPhotoBrowserCell.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
-@interface CQPhotoBrowserVC () <UICollectionViewDataSource,UICollectionViewDelegate>
+@interface CQPhotoBrowser () <UICollectionViewDataSource,UICollectionViewDelegate>
 
 @property (nonatomic, nonatomic) UICollectionView *photoCollectionView;
 
 
 @end
 
-@implementation CQPhotoBrowserVC
+@implementation CQPhotoBrowser
 
 - (instancetype)init {
     if (self = [super init]) {
         
     }
     return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        
+    }
+    return self;
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        
+    }
+    return self; 
 }
 
 - (void)viewDidLoad {
@@ -48,11 +62,15 @@
     if (!_photoCollectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.itemSize = CGSizeMake(CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds));
-        layout.minimumInteritemSpacing = 0;
+//        layout.minimumInteritemSpacing = 0;
+        layout.minimumLineSpacing = 0;
+        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         _photoCollectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:layout];
+        _photoCollectionView.backgroundColor = [UIColor whiteColor];
         _photoCollectionView.delegate = self;
         _photoCollectionView.dataSource = self;
         [_photoCollectionView registerClass:[CQPhotoBrowserCell class] forCellWithReuseIdentifier:NSStringFromClass([CQPhotoBrowserCell class])];
+        _photoCollectionView.pagingEnabled = YES;
     }
     return _photoCollectionView;
 }
@@ -70,6 +88,10 @@
     CQPhotoBrowserCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([CQPhotoBrowserCell class]) forIndexPath:indexPath];
     [cell.imageView sd_setImageWithURL:[NSURL URLWithString:self.dataSourceArray[indexPath.item]] placeholderImage:[UIImage imageNamed:@"bookDefault"]];
     return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

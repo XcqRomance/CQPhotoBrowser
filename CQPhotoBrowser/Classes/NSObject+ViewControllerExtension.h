@@ -13,6 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (UIViewController *)topViewController;
 
+
++ (UIImage *)captureWithView:(UIView *)view;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

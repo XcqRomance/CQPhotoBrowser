@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CQPhotoBrowserVC : UIViewController
+@interface CQPhotoBrowser : UIViewController
 
 @property (nonatomic, strong) UIImage *backgroundImage;
 @property (nonatomic, strong) NSArray *thumbImages;
