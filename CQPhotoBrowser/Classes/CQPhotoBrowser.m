@@ -10,7 +10,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 
 static const int backgroundContainerViewTag = 10000;
-static const NSTimeInterval anmationDuration = 1;
+static const NSTimeInterval anmationDuration = 0.25;
 
 @interface CQPhotoBrowser () <UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate>
 
@@ -134,9 +134,10 @@ static const NSTimeInterval anmationDuration = 1;
     [self.view addSubview:self.containerView];
     
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+    panGesture.maximumNumberOfTouches = 1;
     panGesture.delegate = self;
     [self.containerView addGestureRecognizer:panGesture];
-    
+
     [self setupCollocetionView];
 }
 
@@ -149,14 +150,56 @@ static const NSTimeInterval anmationDuration = 1;
 #pragma mark - event response
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer {
-    
+    NSLog(@"state:=======%ld",(long)gestureRecognizer.state);
+    if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        self.photoCollectionView.scrollEnabled = NO;
+        UIView *inview = gestureRecognizer.view.superview;//[UIApplication sharedApplication].keyWindow;
+         CGPoint translate = [gestureRecognizer translationInView:inview];
+        self.containerView.transform = CGAffineTransformTranslate(self.containerView.transform, translate.x, translate.y);
+        CGFloat distance = sqrt(self.containerView.transform.tx * self.containerView.transform.tx + self.containerView.transform.ty * self.containerView.transform.ty);
+        NSLog(@"distance:-----%f",distance);
+        CGFloat scale = 0;//distance / 200;
+        if (scale > 1) {
+            scale = 1;
+        }
+        self.backgroundContainerView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1.0 - scale * 0.5];
+        self.photoCollectionView.transform =  CGAffineTransformMakeScale(1 - scale*0.4, 1- scale *0.4);
+        
+        NSLog(@"%@",NSStringFromCGPoint(translate));
+        [gestureRecognizer setTranslation:CGPointZero inView:inview];
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        
+
+    } else {
+        self.photoCollectionView.scrollEnabled = YES;
+        
+        CGFloat distance = sqrt(self.containerView.transform.tx * self.containerView.transform.tx + self.containerView.transform.ty * self.containerView.transform.ty);
+        if (distance > 100) {
+            [self dismissAnimation];
+        } else {
+            [UIView animateWithDuration:anmationDuration animations:^{
+                self.containerView.transform = CGAffineTransformIdentity;
+                self.photoCollectionView.transform = CGAffineTransformIdentity;//CGAffineTransformMakeScale(1, 1)
+                self.backgroundContainerView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1.0];
+            } completion:^(BOOL finished) {
+            }];
+        }
+    }
 }
 
 #pragma mark - UIGestureRecognizerDelegate
+
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+//    if (otherGestureRecognizer.view == self.photoCollectionView ) {
+//        return YES;
+//    }
+//    return NO;
+//}
+
 
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -179,6 +222,12 @@ static const NSTimeInterval anmationDuration = 1;
     [self dismissAnimation];
 }
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    CGFloat x = scrollView.contentOffset.x;
+    CGFloat index = x / CGRectGetWidth(scrollView.bounds);
+    self.currentIndex = (NSUInteger)index;
+}
+
 #pragma mark - setter && getter
 
 - (UICollectionView *)photoCollectionView {
@@ -189,7 +238,7 @@ static const NSTimeInterval anmationDuration = 1;
         layout.minimumLineSpacing = 0;
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         _photoCollectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:layout];
-        _photoCollectionView.backgroundColor = [UIColor whiteColor];
+        _photoCollectionView.backgroundColor = [UIColor clearColor];
         _photoCollectionView.delegate = self;
         _photoCollectionView.dataSource = self;
         [_photoCollectionView registerClass:[CQPhotoBrowserCell class] forCellWithReuseIdentifier:NSStringFromClass([CQPhotoBrowserCell class])];
@@ -209,7 +258,7 @@ static const NSTimeInterval anmationDuration = 1;
 - (UIView *)containerView {
     if (!_containerView) {
         _containerView = [[UIView alloc] initWithFrame:self.view.bounds];
-        _containerView.backgroundColor = [UIColor whiteColor];
+        _containerView.backgroundColor = [UIColor clearColor];
     }
     return _containerView;
 }
