@@ -36,7 +36,7 @@
     self.imageView.backgroundColor = [UIColor redColor];
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.imageView.frame = self.bounds;
-    [self addSubview:self.imageView];
+    [self.contentView addSubview:self.imageView];
 }
 
 

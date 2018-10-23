@@ -10,7 +10,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 
 static const int backgroundContainerViewTag = 10000;
-static const NSTimeInterval anmationDuration = 0.25;
+static const NSTimeInterval anmationDuration = 0.35;
 
 @interface CQPhotoBrowser () <UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate>
 
@@ -78,11 +78,19 @@ static const NSTimeInterval anmationDuration = 0.25;
 }
 
 - (void)dismissAnimation {
+    [self dismissAnimationWithImageFrameValue:nil];
+}
+
+- (void)dismissAnimationWithImageFrameValue:(NSValue *)imageFrameValue {
     UIImage *currentImage = self.thumbImages[self.currentIndex];
     UIImageView *imageView = [self.backgroundContainerView viewWithTag:backgroundContainerViewTag + self.currentIndex];
     imageView.image = currentImage;
     
-    imageView.frame = [self imageFrameWithImage:currentImage];
+    if (imageFrameValue) {
+        imageView.frame = [imageFrameValue CGRectValue];
+    } else {
+        imageView.frame = [self imageFrameWithImage:currentImage];
+    }
     
     imageView.hidden = NO;
     self.containerView.hidden = YES;
@@ -95,7 +103,6 @@ static const NSTimeInterval anmationDuration = 0.25;
         [self dismissViewControllerAnimated:NO completion:nil];
     }];
 
-    
 }
 
 - (CGRect)imageFrameWithImage:(UIImage *)image {
@@ -154,32 +161,44 @@ static const NSTimeInterval anmationDuration = 0.25;
 }
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer {
+//    UIImageView *imageView = [self.backgroundContainerView viewWithTag:backgroundContainerViewTag + self.currentIndex];
     NSLog(@"state:=======%ld",(long)gestureRecognizer.state);
+    UIView *inview = gestureRecognizer.view.superview;
+    CGPoint translate = [gestureRecognizer translationInView:inview];
     if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         self.photoCollectionView.scrollEnabled = NO;
-        UIView *inview = gestureRecognizer.view.superview;//[UIApplication sharedApplication].keyWindow;
-         CGPoint translate = [gestureRecognizer translationInView:inview];
+        // 平移 containerView
         self.containerView.transform = CGAffineTransformTranslate(self.containerView.transform, translate.x, translate.y);
-        CGFloat distance = sqrt(self.containerView.transform.tx * self.containerView.transform.tx + self.containerView.transform.ty * self.containerView.transform.ty);
-        NSLog(@"distance:-----%f",distance);
-        CGFloat scale = 0;//distance / 200;
+        // 计算偏移量，两个数平方的和的平方根
+        CGFloat offset = hypotf(self.containerView.transform.tx, self.containerView.transform.ty);
+        NSLog(@"offset:-----%f",offset);
+        CGFloat scale = offset / 100;
         if (scale > 1) {
             scale = 1;
         }
-        self.backgroundContainerView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1.0 - scale * 0.5];
+        // 根据偏移量设置背景透明度
+        self.backgroundContainerView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1.0 - scale * 0.4];
+        // 设置图片缩放 
         self.photoCollectionView.transform =  CGAffineTransformMakeScale(1 - scale*0.4, 1- scale *0.4);
         
         NSLog(@"%@",NSStringFromCGPoint(translate));
         [gestureRecognizer setTranslation:CGPointZero inView:inview];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        
+//        imageView.frame = [self imageFrameWithImage:self.thumbImages[self.currentIndex]];
 
     } else {
         self.photoCollectionView.scrollEnabled = YES;
         
-        CGFloat distance = sqrt(self.containerView.transform.tx * self.containerView.transform.tx + self.containerView.transform.ty * self.containerView.transform.ty);
-        if (distance > 100) {
-            [self dismissAnimation];
+        // 计算偏移量，两个数平方的和的平方根
+        CGFloat offset = hypotf(self.containerView.transform.tx, self.containerView.transform.ty);
+        if (offset > 100) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.currentIndex inSection:0];
+            CQPhotoBrowserCell *cell = (CQPhotoBrowserCell *)[self.photoCollectionView cellForItemAtIndexPath:indexPath];
+            UIImageView *imageView = cell.imageView;
+            CGRect imageViewFrame = imageView.frame;
+            CGRect windowFrame = [imageView.superview convertRect:imageViewFrame toView:[UIApplication sharedApplication].keyWindow];
+            NSLog(@"");
+            [self dismissAnimationWithImageFrameValue:[NSValue valueWithCGRect:windowFrame]];
         } else {
             [UIView animateWithDuration:anmationDuration animations:^{
                 self.containerView.transform = CGAffineTransformIdentity;
