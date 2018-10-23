@@ -36,7 +36,15 @@
     self.imageView.backgroundColor = [UIColor redColor];
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.imageView.frame = self.bounds;
+    self.imageView.userInteractionEnabled = YES;
     [self.contentView addSubview:self.imageView];
+    
+    UILongPressGestureRecognizer *longPressGesture= [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureAction:)];
+    [self.imageView addGestureRecognizer:longPressGesture]; 
+}
+
+- (void)longPressGestureAction:(UILongPressGestureRecognizer *)gestureRecognizer {
+    
 }
 
 

@@ -9,6 +9,8 @@
 #import "CQPhotoBrowser.h"
 #import "NSObject+ViewControllerExtension.h"
 
+typedef void(^CQPhotoBrowserCustomToolBarBlock)(void);
+
 @implementation CQPhotoBrowserUtil
 
 
@@ -20,8 +22,12 @@
     photoBrowser.backgroundImage = [NSObject captureWithView:topVC.navigationController.view];
     photoBrowser.thumbImages = thumbImages;
     photoBrowser.thumbImagesFrames = thumbImagesFrame;
-//    [topVC.navigationController pushViewController:photoBrowser animated:YES];
     [topVC presentViewController:photoBrowser animated:NO completion:nil];
+}
+
+
++ (void)showPhotoWithPhotos:(NSArray *)photos index:(NSUInteger)index thumbImages:(NSArray<UIImage *> *)thumbImages thumbImagesFrame:(NSArray<NSValue *> *)thumbImagesFrame customToolBarBlock:(CQPhotoBrowserCustomToolBarBlock)customToolBarBlock {
+    
 }
 
 @end
