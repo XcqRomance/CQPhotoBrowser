@@ -35,4 +35,8 @@
     self.titleLabel.text = [NSString stringWithFormat:@"%lu/%lu",index,(unsigned long)total];
 }
 
+- (void)setTitleHidden {
+    self.titleLabel.hidden = YES; 
+}
+
 @end

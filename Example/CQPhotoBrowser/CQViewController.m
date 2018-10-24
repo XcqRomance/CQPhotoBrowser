@@ -78,10 +78,10 @@
         [thumbImagesFrames addObject:rectValue];
     }
     
-    [CQPhotoBrowserUtil showPhotoWithPhotos:self.photos index:indexPath.item thumbImages:thumbImages thumbImagesFrame:thumbImagesFrames];
-//    [CQPhotoBrowserUtil showPhotoWithPhotos:self.photos index:indexPath.item thumbImages:thumbImages thumbImagesFrame:thumbImagesFrames photoBrowserDelegate:self customToolBarBlock:^{
+//    [CQPhotoBrowserUtil showPhotoWithPhotos:self.photos index:indexPath.item thumbImages:thumbImages thumbImagesFrame:thumbImagesFrames];
+    [CQPhotoBrowserUtil showPhotoWithPhotos:self.photos index:indexPath.item thumbImages:thumbImages thumbImagesFrame:thumbImagesFrames photoBrowserDelegate:self customToolBarBlock:^{
     
-//    }];
+    }];
 }
 
 #pragma mark - CQPhotoBrowserDelegate
@@ -91,7 +91,7 @@
 }
 
 - (UIView *)photoBrowserTopToolBarView {
-    return self.view;
+    return nil;
 }
 
 @end

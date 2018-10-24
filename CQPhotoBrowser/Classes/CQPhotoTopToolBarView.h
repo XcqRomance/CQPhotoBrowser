@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CQPhotoTopToolBarView : UIView
 
 - (void)setTitleWithCurrentIndex:(NSUInteger)index totalIndex:(NSUInteger)total;
+- (void)setTitleHidden;
 
 @end
 

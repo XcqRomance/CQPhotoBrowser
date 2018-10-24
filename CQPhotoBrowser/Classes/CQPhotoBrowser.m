@@ -9,7 +9,8 @@
 #import "CQPhotoBrowserCell.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "CQPhotoTopToolBarView.h"
-#import "CQPhotoBrowserMacroDefinition.m"
+#import "CQPhotoBottomToolBarView.h"
+#import "CQPhotoBrowserMacroDefinition.h"
 
 static const int backgroundContainerViewTag = 10000;
 static const NSTimeInterval anmationDuration = 0.35;
@@ -28,6 +29,8 @@ static const NSTimeInterval anmationDuration = 0.35;
 @property (nonatomic, assign) NSUInteger photoIndex;
 
 @property (nonatomic, strong) CQPhotoTopToolBarView *topView;
+
+@property (nonatomic, strong) CQPhotoBottomToolBarView *bottomView;
 
 
 @end
@@ -51,15 +54,12 @@ static const NSTimeInterval anmationDuration = 0.35;
     [self setupBackgroundContainerView];
     [self setupContainerView];
     
-//    CQPhotoTopToolBarView *topView = [[CQPhotoTopToolBarView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
-    [self.view addSubview:self.topView];
+    [self setupTopView];
     
-    if ([self.delegate respondsToSelector:@selector(photoBrowserTopToolBarView)]) {
-        [self.view addSubview:[self.delegate photoBrowserTopToolBarView]];
-    }
-    if ([self.delegate respondsToSelector:@selector(photoBrowserBottomToolBarView)]) {
-        [self.view addSubview:[self.delegate photoBrowserBottomToolBarView]];
-    }
+    [self setupBottomView];
+    
+    [self setupTopAndBottomViewHidden:YES];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -90,6 +90,7 @@ static const NSTimeInterval anmationDuration = 0.35;
         self.containerView.hidden = NO;
         imageView.frame = [value CGRectValue];
         imageView.hidden = YES;
+        [self setupTopAndBottomViewHidden:NO];
     }];
 }
 
@@ -98,6 +99,8 @@ static const NSTimeInterval anmationDuration = 0.35;
 }
 
 - (void)dismissAnimationWithImageFrameValue:(NSValue *)imageFrameValue {
+    [self setupTopAndBottomViewHidden:YES];
+    
     UIImage *currentImage = self.thumbImages[self.currentIndex];
     UIImageView *imageView = [self.backgroundContainerView viewWithTag:backgroundContainerViewTag + self.currentIndex];
     imageView.image = currentImage;
@@ -170,6 +173,50 @@ static const NSTimeInterval anmationDuration = 0.35;
     [self.photoCollectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
 }
 
+- (void)setupTopView {
+    // add topView
+    [self.view addSubview:self.topView];
+    
+    // set title
+    if (self.dataSourceArray.count > 1) {
+        [self.topView setTitleWithCurrentIndex:self.currentIndex+1 totalIndex:self.dataSourceArray.count];
+    }
+    
+    // set custom topView
+    if ([self.delegate respondsToSelector:@selector(photoBrowserTopToolBarView)]) {
+        UIView *topToolBarView = [self.delegate photoBrowserTopToolBarView];
+        if (topToolBarView) {
+            [self.topView setTitleHidden];
+            [self.topView addSubview:topToolBarView];
+            CGRect frame = topToolBarView.frame;
+            frame.origin = CGPointZero;
+            topToolBarView.frame = frame;
+        }
+    }
+}
+
+- (void)setupBottomView {
+    
+    [self.view addSubview:self.bottomView];
+    self.bottomView.backgroundColor = [UIColor yellowColor];
+    
+    if ([self.delegate respondsToSelector:@selector(photoBrowserBottomToolBarView)]) {
+        UIView *bottomToolBarView = [self.delegate photoBrowserBottomToolBarView];
+        if (bottomToolBarView) {
+            [self.bottomView setDownloadButtonHidden];
+            [self.bottomView addSubview:bottomToolBarView];
+            CGRect frame = bottomToolBarView.frame;
+            frame.origin = CGPointZero;
+            bottomToolBarView.frame = frame;
+        }
+    }
+}
+
+- (void)setupTopAndBottomViewHidden:(BOOL)hidden {
+    self.topView.hidden = hidden;
+    self.bottomView.hidden = hidden;
+}
+
 #pragma mark - event response
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -178,7 +225,7 @@ static const NSTimeInterval anmationDuration = 0.35;
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer {
 //    UIImageView *imageView = [self.backgroundContainerView viewWithTag:backgroundContainerViewTag + self.currentIndex];
-    NSLog(@"state:=======%ld",(long)gestureRecognizer.state);
+    CQLog(@"state:=======%ld",(long)gestureRecognizer.state);
     UIView *inview = gestureRecognizer.view.superview;
     CGPoint translate = [gestureRecognizer translationInView:inview];
     if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
@@ -187,7 +234,7 @@ static const NSTimeInterval anmationDuration = 0.35;
         self.containerView.transform = CGAffineTransformTranslate(self.containerView.transform, translate.x, translate.y);
         // 计算偏移量，两个数平方的和的平方根
         CGFloat offset = hypotf(self.containerView.transform.tx, self.containerView.transform.ty);
-        NSLog(@"offset:-----%f",offset);
+        CQLog(@"offset:-----%f",offset);
         CGFloat scale = offset / 100;
         if (scale > 1) {
             scale = 1;
@@ -197,11 +244,12 @@ static const NSTimeInterval anmationDuration = 0.35;
         // 设置图片缩放 
         self.photoCollectionView.transform =  CGAffineTransformMakeScale(1 - scale*0.4, 1- scale *0.4);
         
-        NSLog(@"%@",NSStringFromCGPoint(translate));
+        CQLog(@"%@",NSStringFromCGPoint(translate));
         [gestureRecognizer setTranslation:CGPointZero inView:inview];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
 //        imageView.frame = [self imageFrameWithImage:self.thumbImages[self.currentIndex]];
-
+        [self setupTopAndBottomViewHidden:YES];
+        
     } else {
         self.photoCollectionView.scrollEnabled = YES;
         
@@ -213,7 +261,7 @@ static const NSTimeInterval anmationDuration = 0.35;
             UIImageView *imageView = cell.imageView;
             CGRect imageViewFrame = imageView.frame;
             CGRect windowFrame = [imageView.superview convertRect:imageViewFrame toView:[UIApplication sharedApplication].keyWindow];
-            NSLog(@"");
+            CQLog(@"");
             [self dismissAnimationWithImageFrameValue:[NSValue valueWithCGRect:windowFrame]];
         } else {
             [UIView animateWithDuration:anmationDuration animations:^{
@@ -221,6 +269,7 @@ static const NSTimeInterval anmationDuration = 0.35;
                 self.photoCollectionView.transform = CGAffineTransformIdentity;//CGAffineTransformMakeScale(1, 1)
                 self.backgroundContainerView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1.0];
             } completion:^(BOOL finished) {
+                [self setupTopAndBottomViewHidden:NO];
             }];
         }
     }
@@ -258,20 +307,26 @@ static const NSTimeInterval anmationDuration = 0.35;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    CGFloat x = scrollView.contentOffset.x;
-    CGFloat index = x / CGRectGetWidth(scrollView.bounds);
-    self.currentIndex = (NSUInteger)index;
-    [self.topView setTitleWithCurrentIndex:self.currentIndex totalIndex:self.dataSourceArray.count];
+//    CGFloat x = scrollView.contentOffset.x;
+//    CGFloat index = x / CGRectGetWidth(scrollView.bounds);
+//    self.currentIndex = (NSUInteger)index;
+//    [self.topView setTitleWithCurrentIndex:self.currentIndex totalIndex:self.dataSourceArray.count];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat width = CGRectGetWidth(scrollView.bounds);
     CGFloat x = scrollView.contentOffset.x + width/2;
-    CGFloat index = x / width;
-    self.photoIndex = (NSUInteger)index + 1;
-    NSLog(@"%lu",(unsigned long)self.photoIndex);
-    if ([self.delegate respondsToSelector:@selector(photoBrowserDidChangeCurrentPhotoIndex:)]) {
-        [self.delegate photoBrowserDidChangeCurrentPhotoIndex:self.photoIndex];
+    NSUInteger index = (NSUInteger)(x / width);
+    if (self.currentIndex != index) { // 翻页了才更新index值
+        self.currentIndex = index;
+        self.photoIndex = (NSUInteger)index + 1;
+        CQLog(@"--scrollViewDidScroll---index:%lu",(unsigned long)self.photoIndex);
+        [self.topView setTitleWithCurrentIndex:self.currentIndex+1 totalIndex:self.dataSourceArray.count];
+//        [self.bottomView setCurrentImage:image];
+        
+        if ([self.delegate respondsToSelector:@selector(photoBrowserDidChangeCurrentPhotoIndex:)]) {
+            [self.delegate photoBrowserDidChangeCurrentPhotoIndex:self.photoIndex];
+        }
     }
 }
 
@@ -320,9 +375,43 @@ static const NSTimeInterval anmationDuration = 0.35;
 
 - (CQPhotoTopToolBarView *)topView {
     if (!_topView) {
-        _topView = [[CQPhotoTopToolBarView alloc] initWithFrame:CGRectMake(0, liuhaiHeight, self.view.bounds.size.width, 44)];
+        _topView = [[CQPhotoTopToolBarView alloc] initWithFrame:CGRectMake(0, cq_liuhaiHeight, cq_kScreentWidth, 44)];
     }
     return _topView; 
+}
+
+
+-(CQPhotoBottomToolBarView *)bottomView {
+    if (!_bottomView) {
+        _bottomView = [[CQPhotoBottomToolBarView alloc] initWithFrame:CGRectMake(0, cq_kScreentHeight - cq_kHomeIndicatorHeight - 44, cq_kScreentWidth, 44)];
+        weakify(weakSelf)
+        _bottomView.saveImageBlock = ^{
+            strongify(strongSelf)
+            // 图片已经下载
+            UIImage *image = [[[SDWebImageManager sharedManager] imageCache] imageFromCacheForKey:strongSelf.dataSourceArray[strongSelf.currentIndex]];
+            // 图片没有下载使用缩略图
+            if (!image) {
+                image = strongSelf.thumbImages[strongSelf.currentIndex];
+            }
+
+            if (image) {
+                UIImageWriteToSavedPhotosAlbum(image, strongSelf, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+            }
+        };
+    }
+    return _bottomView;
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+    if ([self.delegate respondsToSelector:@selector(photoBrowserDidFinishSavingImageWithError:)]) {
+        [self.delegate photoBrowserDidFinishSavingImageWithError:error];
+    } else {
+        if (error) {
+            CQLog(@"failed");
+        } else {
+            CQLog(@"success");
+        }
+    }
 }
 
 @end
