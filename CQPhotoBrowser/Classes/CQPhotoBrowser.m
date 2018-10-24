@@ -8,6 +8,8 @@
 #import "CQPhotoBrowser.h"
 #import "CQPhotoBrowserCell.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "CQPhotoTopToolBarView.h"
+#import "CQPhotoBrowserMacroDefinition.m"
 
 static const int backgroundContainerViewTag = 10000;
 static const NSTimeInterval anmationDuration = 0.35;
@@ -22,6 +24,10 @@ static const NSTimeInterval anmationDuration = 0.35;
 @property (nonatomic, strong) UIView *containerView;
 
 @property (nonatomic, strong) UICollectionView *photoCollectionView;
+
+@property (nonatomic, assign) NSUInteger photoIndex;
+
+@property (nonatomic, strong) CQPhotoTopToolBarView *topView;
 
 
 @end
@@ -44,6 +50,16 @@ static const NSTimeInterval anmationDuration = 0.35;
     
     [self setupBackgroundContainerView];
     [self setupContainerView];
+    
+//    CQPhotoTopToolBarView *topView = [[CQPhotoTopToolBarView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
+    [self.view addSubview:self.topView];
+    
+    if ([self.delegate respondsToSelector:@selector(photoBrowserTopToolBarView)]) {
+        [self.view addSubview:[self.delegate photoBrowserTopToolBarView]];
+    }
+    if ([self.delegate respondsToSelector:@selector(photoBrowserBottomToolBarView)]) {
+        [self.view addSubview:[self.delegate photoBrowserBottomToolBarView]];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -245,6 +261,18 @@ static const NSTimeInterval anmationDuration = 0.35;
     CGFloat x = scrollView.contentOffset.x;
     CGFloat index = x / CGRectGetWidth(scrollView.bounds);
     self.currentIndex = (NSUInteger)index;
+    [self.topView setTitleWithCurrentIndex:self.currentIndex totalIndex:self.dataSourceArray.count];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat width = CGRectGetWidth(scrollView.bounds);
+    CGFloat x = scrollView.contentOffset.x + width/2;
+    CGFloat index = x / width;
+    self.photoIndex = (NSUInteger)index + 1;
+    NSLog(@"%lu",(unsigned long)self.photoIndex);
+    if ([self.delegate respondsToSelector:@selector(photoBrowserDidChangeCurrentPhotoIndex:)]) {
+        [self.delegate photoBrowserDidChangeCurrentPhotoIndex:self.photoIndex];
+    }
 }
 
 #pragma mark - setter && getter
@@ -288,6 +316,13 @@ static const NSTimeInterval anmationDuration = 0.35;
         _backgroundContainerView.backgroundColor =  [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
     }
     return _backgroundContainerView;
+}
+
+- (CQPhotoTopToolBarView *)topView {
+    if (!_topView) {
+        _topView = [[CQPhotoTopToolBarView alloc] initWithFrame:CGRectMake(0, liuhaiHeight, self.view.bounds.size.width, 44)];
+    }
+    return _topView; 
 }
 
 @end

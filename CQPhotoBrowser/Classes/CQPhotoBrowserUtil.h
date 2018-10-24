@@ -9,6 +9,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void(^CQPhotoBrowserCustomToolBarBlock)(void);
+
+@protocol CQPhotoBrowserDelegate;
+
 @interface CQPhotoBrowserUtil : NSObject
 
 
@@ -20,7 +24,17 @@ NS_ASSUME_NONNULL_BEGIN
  @param thumbImages 列表页缩略图image
  @param thumbImagesFrame 列表页缩略图的frame
  */
-+ (void)showPhotoWithPhotos:(NSArray *)photos index:(NSUInteger)index thumbImages:(NSArray <UIImage *> *)thumbImages thumbImagesFrame:(NSArray <NSValue *>*)thumbImagesFrame;
++ (void)showPhotoWithPhotos:(NSArray *)photos
+                      index:(NSUInteger)index
+                thumbImages:(NSArray <UIImage *> *)thumbImages
+           thumbImagesFrame:(NSArray <NSValue *>*)thumbImagesFrame;
+
++ (void)showPhotoWithPhotos:(NSArray *)photos
+                      index:(NSUInteger)index
+                thumbImages:(NSArray<UIImage *> *)thumbImages
+           thumbImagesFrame:(NSArray<NSValue *> *)thumbImagesFrame
+       photoBrowserDelegate:(id <CQPhotoBrowserDelegate>)delegate
+         customToolBarBlock:(CQPhotoBrowserCustomToolBarBlock)customToolBarBlock;
 
 @end
 

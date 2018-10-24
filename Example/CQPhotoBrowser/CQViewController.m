@@ -10,8 +10,9 @@
 #import "CQPhotoCell.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "CQPhotoBrowserUtil.h"
+#import "CQPhotoBrowser.h"
 
-@interface CQViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface CQViewController () <UICollectionViewDataSource, UICollectionViewDelegate, CQPhotoBrowserDelegate>
 
 @property (nonatomic, nonatomic) UICollectionView *photoCollectionView;
 @property (nonatomic, strong) NSMutableArray *photos;
@@ -78,7 +79,19 @@
     }
     
     [CQPhotoBrowserUtil showPhotoWithPhotos:self.photos index:indexPath.item thumbImages:thumbImages thumbImagesFrame:thumbImagesFrames];
+//    [CQPhotoBrowserUtil showPhotoWithPhotos:self.photos index:indexPath.item thumbImages:thumbImages thumbImagesFrame:thumbImagesFrames photoBrowserDelegate:self customToolBarBlock:^{
     
+//    }];
+}
+
+#pragma mark - CQPhotoBrowserDelegate
+
+- (void)photoBrowserDidResponseLongPressGesture:(UILongPressGestureRecognizer *)gestureRecognizer {
+    
+}
+
+- (UIView *)photoBrowserTopToolBarView {
+    return self.view;
 }
 
 @end
