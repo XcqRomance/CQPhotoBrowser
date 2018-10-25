@@ -32,7 +32,7 @@
 
 - (void)setupImageViw {
     UIImage *placeholder = [UIImage imageNamed:@"bookDefault"];
-    self.imageView = [[UIImageView alloc] initWithImage:placeholder];
+    self.imageView = [[CQPhotoBrowserImageView alloc] initWithImage:placeholder];
     self.imageView.backgroundColor = [UIColor redColor];
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.imageView.frame = self.bounds;

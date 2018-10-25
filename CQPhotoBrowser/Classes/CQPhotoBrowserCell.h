@@ -6,12 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CQPhotoBrowserImageView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CQPhotoBrowserCell : UICollectionViewCell
 
-@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) CQPhotoBrowserImageView *imageView;
 
 @end
 
