@@ -8,11 +8,11 @@
 #import <Foundation/Foundation.h>
 
 #ifndef cq_kScreentWidth
-#define cq_kScreentWidth [UIScreen mainScreen].bounds.size.width
+#define cq_kScreentWidth ([UIScreen mainScreen].bounds.size.width)
 #endif
 
 #ifndef cq_kScreentHeight
-#define cq_kScreentHeight [UIScreen mainScreen].bounds.size.height
+#define cq_kScreentHeight ([UIScreen mainScreen].bounds.size.height)
 #endif
 
 #ifndef cq_is_iPhoneX_Series
