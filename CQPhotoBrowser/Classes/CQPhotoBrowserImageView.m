@@ -37,8 +37,8 @@
 }
 
 - (void)setupView {
-    self.progressView = [[CQPhotoBrowserProgressView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
-    
+    self.progressView = [[CQPhotoBrowserProgressView alloc] initWithFrame:CGRectMake(0, 0, 36*2, 36*2)];
+
     [self addSubview:self.progressView];
 }
 
